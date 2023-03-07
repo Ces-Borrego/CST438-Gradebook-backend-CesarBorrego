@@ -21,7 +21,8 @@ class Gradebook extends React.Component {
       super(props);
       console.log("Gradebook.cnstr "+ JSON.stringify(props.location));
       this.state = {  grades :  [] };
-    } 
+    } ls
+    
     
      componentDidMount() {
       this.fetchGrades();
