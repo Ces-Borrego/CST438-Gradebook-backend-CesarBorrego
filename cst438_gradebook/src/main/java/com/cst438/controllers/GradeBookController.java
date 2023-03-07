@@ -2,6 +2,8 @@ package com.cst438.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Date;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.cst438.domain.Assignment;
+import com.cst438.domain.AssignmentListDTO.AssignmentDTO;
 import com.cst438.domain.AssignmentListDTO;
 import com.cst438.domain.AssignmentGrade;
 import com.cst438.domain.AssignmentGradeRepository;
@@ -156,6 +159,25 @@ public class GradeBookController {
 		
 	}
 	
+	@PostMapping("/assignment")
+	@Transactional
+	public void addAssignment(@RequestBody AssignmentDTO assignmentDTO) {
+		// create new assignment object from DTO
+		Assignment assignment = new Assignment();
+		assignment.setName(assignmentDTO.assignmentName);
+		assignment.setDueDate(Date.valueOf(assignmentDTO.dueDate));
+		
+		// find course object and set it in assignment
+		Course course = courseRepository.findById(assignmentDTO.courseId).orElse(null);
+		if (course == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Course not found.");
+		}
+		assignment.setCourse(course);
+		
+		// save assignment object to repository
+		assignmentRepository.save(assignment);
+	}
+	
 	private Assignment checkAssignment(int assignmentId, String email) {
 		// get assignment 
 		Assignment assignment = assignmentRepository.findById(assignmentId).orElse(null);
@@ -169,5 +191,7 @@ public class GradeBookController {
 		
 		return assignment;
 	}
+	
+
 
 }
