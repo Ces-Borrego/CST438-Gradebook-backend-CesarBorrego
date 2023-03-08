@@ -42,11 +42,8 @@ public class AssignmentController {
 		}
 		
 		Assignment a = new Assignment();
-		a.setId(newAssignment.getAssignmentId());
 		a.setName(newAssignment.getAssignmentName());
 		a.setDueDate(newAssignment.getDueDate());
-		a.setCourse(courseRepository.findById(newCourseId));
-		a.setNeedsGrading(newAssignment.needsGrading);
 		
 		Assignment savedAssignment = assignmentRepository.save(a);
 		
@@ -54,21 +51,23 @@ public class AssignmentController {
 		return result;
 	}
 	
-	@PatchMapping("/assignment/editName{email}")
+	@PutMapping("/assignment/editName{assignmentId}")
 	@Transactional
-	public AssignmentDTO editAssignment(@RequestBody String name, @PathVariable String email) {
-		Assignment assignment = assignmentRepository.findByName(name);
-		
+	public void editAssignment(@RequestBody String name, @PathVariable int assignmentId) {
+		String email = "dwisneski@csumb.edu"; //make sure email is that of instructor
+
+		Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
 		if(assignment == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There already exists an assignment with that name.");
 		} else {
 			assignment.setName(name);
+			
+			Assignment savedAssignment = assignmentRepository.save(assignment);
+			
+			AssignmentDTO result = createAssignmentDTO(savedAssignment);
+			return result;
 		}
 		
-		Assignment savedAssignment = assignmentRepository.save(assignment);
-		
-		AssignmentDTO result = createAssignmentDTO(savedAssignment);
-		return result;
 	}
 	
 	@DeleteMapping("/assignment/delete{id}")
