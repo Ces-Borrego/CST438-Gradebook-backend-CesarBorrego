@@ -11,9 +11,11 @@ public interface AssignmentRepository extends CrudRepository <Assignment, Intege
 	@Query("select a from Assignment a where a.needsGrading=1 and a.dueDate < current_date and a.course.instructor= :email order by a.id")
 	List<Assignment> findNeedGradingByEmail(@Param("email") String email);
 	
-	default void addAssignment(AssignmentListDTO assignmentDTO) {
-		Assignment assignment = new Assignment();
-//		assignment = (Assignment) assignmentDTO;
-		
-	}
+	@Query("select a from Assignment a where a.name= :name order by a.id")
+	List<Assignment> findAssignmentByName(@Param("name") String name);
+	
+	public Assignment findById(int id);
+	
+	public Assignment findByName(String name);
+ 	
 }
