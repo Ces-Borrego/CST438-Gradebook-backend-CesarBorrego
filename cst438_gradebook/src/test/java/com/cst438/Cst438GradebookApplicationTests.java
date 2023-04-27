@@ -1,7 +1,18 @@
 package com.cst438;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Date;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.cst438.domain.Assignment;
+import com.cst438.domain.Course;
+import com.cst438.domain.Enrollment;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 class Cst438GradebookApplicationTests {
@@ -12,8 +23,10 @@ class Cst438GradebookApplicationTests {
 	public static final String TEST_SEMESTER = "Fall";
 	public static final String TEST_INSTRUCTOR_EMAIL = "dwisneski@csumb.edu";
 	public static final String TEST_ASSIGNMENT_NAME = "Test Assignment 1";
-	public static final Date TEST_ASSIGNMENT_DUEDATE = new java.sql.Date();
+	public static final Date TEST_ASSIGNMENT_DUEDATE = new java.sql.Date(0);
 	public static final int TEST_ASSIGNMENT_NEEDSGRADING = 0;
+	public static final String TEST_STUDENT_NAME = "Test";
+	public static final String TEST_USER_EMAIL = "test@csumb.edu";
 
 	@Test
 	void contextLoads() {
@@ -81,7 +94,7 @@ class Cst438GradebookApplicationTests {
 		assertEquals(200, response.getStatus());
 		
 		// verify response contains necessary object variable for creation(dueDate, name)
-		assertEquals(TEST_ASSIGNMENT_NAME, respones.assignmentName);
+		assertEquals(TEST_ASSIGNMENT_NAME, response.assignmentName);
 		assertEquals(TEST_ASSIGNMENT_DUEDATE, response.dueDate);				
 	}
 
