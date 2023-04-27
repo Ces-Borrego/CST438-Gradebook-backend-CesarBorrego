@@ -1,6 +1,7 @@
 package com.cst438.controllers;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +57,16 @@ public class AssignmentController {
 	public void editAssignment(@RequestBody String name, @PathVariable int assignmentId) {
 		String email = "dwisneski@csumb.edu"; //make sure email is that of instructor
 
-		Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
+		Assignment assignment = assignmentRepository.findById(assignmentId);
 		if(assignment == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"There already exists an assignment with that name.");
 		} else {
-			assignment.setName(name);
+			if(assignment.getCourse().getInstructor().equalsIgnoreCase(email)) {
+				assignment.setName(name);
+				
+				assignmentRepository.save(assignment);
 			
-			Assignment savedAssignment = assignmentRepository.save(assignment);
-			
-			AssignmentDTO result = createAssignmentDTO(savedAssignment);
-			return result;
+			}
 		}
 		
 	}

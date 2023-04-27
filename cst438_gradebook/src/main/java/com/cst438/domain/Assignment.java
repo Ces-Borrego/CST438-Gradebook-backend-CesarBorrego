@@ -77,7 +77,6 @@ public class Assignment {
 	}
 
 	public Assignment orElse(Object object) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
